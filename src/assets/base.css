@@ -5,6 +5,8 @@
   --main-animation-color: #ffffff;
   --main-margin: 20px;
   --perspective: 500px;
+  --main-time-line-color: #e53434;
+  --main-back-time-line-color: #ffffff;
 }
 
 * {

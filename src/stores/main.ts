@@ -21,6 +21,18 @@ export const useParamStore = defineStore('param', () => {
       : '#ffffff',
   )
 
+  const mainTimeLineColor = ref(
+    localStorage.getItem('mainTimeLineColor')
+      ? localStorage.getItem('mainTimeLineColor')
+      : '#e53434',
+  )
+
+  const mainBackTimeLineColor = ref(
+    localStorage.getItem('mainBackTimeLineColor')
+      ? localStorage.getItem('mainBackTimeLineColor')
+      : '#ffffff',
+  )
+
   const margin = ref(
     Number(localStorage.getItem('margin')) ? Number(localStorage.getItem('margin')) : 20,
   )
@@ -48,13 +60,17 @@ export const useParamStore = defineStore('param', () => {
   const pause = ref(false)
   const stopIfWorkSessionEnd = ref(
     localStorage.getItem('stopIfWorkSessionEnd')
-      ? Boolean(localStorage.getItem('stopIfWorkSessionEnd'))
+      ? localStorage.getItem('stopIfWorkSessionEnd') === 'true'
       : false,
   )
   const makeSoundIfWorkSessionEnd = ref(
     localStorage.getItem('makeSoundIfWorkSessionEnd')
-      ? Boolean(localStorage.getItem('makeSoundIfWorkSessionEnd'))
+      ? localStorage.getItem('makeSoundIfWorkSessionEnd') === 'true'
       : false,
+  )
+
+  const showTimeline = ref(
+    localStorage.getItem('showTimeline') ? localStorage.getItem('showTimeline') === 'true' : true,
   )
   const animationType = ref(
     localStorage.getItem('animationType') ? Number(localStorage.getItem('animationType')) : 1,
@@ -72,6 +88,9 @@ export const useParamStore = defineStore('param', () => {
     localStorage.setItem('mainBorderColor', mainAnimationColor.value)
     localStorage.setItem('margin', String(margin.value))
 
+    localStorage.setItem('mainTimeLineColor', mainTimeLineColor.value)
+    localStorage.setItem('mainBackTimeLineColor', mainBackTimeLineColor.value)
+
     localStorage.setItem('animationType', String(animationType.value))
     localStorage.setItem('perspective', String(perspective.value))
 
@@ -85,6 +104,8 @@ export const useParamStore = defineStore('param', () => {
     localStorage.setItem('stopIfWorkSessionEnd', String(stopIfWorkSessionEnd.value))
     localStorage.setItem('makeSoundIfWorkSessionEnd', String(makeSoundIfWorkSessionEnd.value))
 
+    localStorage.setItem('showTimeline', String(showTimeline.value))
+
     localStorage.setItem('smile', String(smile.value))
   }
 
@@ -95,6 +116,12 @@ export const useParamStore = defineStore('param', () => {
     document.documentElement.style.setProperty('--main-animation-color', mainAnimationColor.value)
     document.documentElement.style.setProperty('--main-margin', margin.value + 'px')
 
+    document.documentElement.style.setProperty('--main-time-line-color', mainTimeLineColor.value)
+    document.documentElement.style.setProperty(
+      '--main-back-time-line-color',
+      mainBackTimeLineColor.value,
+    )
+
     document.documentElement.style.setProperty('--perspective', perspective.value + 'px')
   }
 
@@ -103,6 +130,8 @@ export const useParamStore = defineStore('param', () => {
     mainTextColor.value = '#ffffff'
     mainBorderColor.value = '#ffffff'
     mainAnimationColor.value = '#ffffff'
+    mainBackTimeLineColor.value = '#ffffff'
+    mainTimeLineColor.value = '#e53434'
     perspective.value = 500
     margin.value = 20
 
@@ -138,5 +167,8 @@ export const useParamStore = defineStore('param', () => {
     perspective,
     mainAnimationColor,
     smile,
+    mainTimeLineColor,
+    mainBackTimeLineColor,
+    showTimeline,
   }
 })

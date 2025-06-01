@@ -82,6 +82,20 @@ function handleGoToGithub() {
               <p>px</p>
             </div>
           </div>
+          <TitleLine title="Таймлайн" />
+          <div class="param__option">
+            <p>Показать таймлайн</p>
+            <input type="checkbox" v-model="paramStore.showTimeline" @change="handleChange">
+          </div>
+          <div class="param__option" v-if="paramStore.showTimeline">
+            <p>Цвет таймлайна</p>
+            <input type="color" v-model="paramStore.mainTimeLineColor" @change="handleChange">
+          </div>
+          <div class="param__option" v-if="paramStore.showTimeline">
+            <p>Задний цвет таймлайна</p>
+            <input type="color" v-model="paramStore.mainBackTimeLineColor" @change="handleChange">
+          </div>
+
           <TitleLine title="Время" />
           <div class="param__option clock">
             <p>Время работы</p>

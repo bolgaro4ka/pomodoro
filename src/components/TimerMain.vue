@@ -1,21 +1,15 @@
 <script setup lang="ts">
 import { useParamStore } from '@/stores/main';
-import { onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-
-const Chours = ref()
-const Cminutes = ref()
-const Cseconds = ref()
-const Cmilliseconds = ref()
+import { onMounted, ref, type Ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const audio = ref()
 
 let interval;
-let minutes: number;
-let seconds: number;
-let hours: number;
+const minutes: Ref<number | undefined> = ref(undefined);
+const seconds: Ref<number | undefined> = ref(undefined);
+const hours: Ref<number | undefined> = ref(undefined);
 
-const route = useRoute()
 const router = useRouter()
 const paramStore = useParamStore()
 
@@ -25,49 +19,46 @@ function mainHandler() {
     const Rseconds = paramStore.timeSecondsWork
     const Rhours = paramStore.timeHoursWork
 
-    minutes = minutes != undefined ? minutes : Rminutes as number
-    seconds = seconds != undefined ? seconds : Rseconds as number
-    hours = hours != undefined ? hours : Rhours as number
+    minutes.value = minutes.value != undefined ? minutes.value : Rminutes as number
+    seconds.value = seconds.value != undefined ? seconds.value : Rseconds as number
+    hours.value = hours.value != undefined ? hours.value : Rhours as number
 
 
 
     interval = setInterval(() => {
-      if (seconds <= 0) {
-        if (minutes <= 0) {
-          if (hours <= 0) {
+      if (seconds.value <= 0) {
+        if (minutes.value <= 0) {
+          if (hours.value <= 0) {
             clearInterval(interval)
             paramStore.isWorkTime = false
-            minutes = undefined
-            seconds = undefined
-            hours = undefined
+            minutes.value = undefined
+            seconds.value = undefined
+            hours.value = undefined
             if (paramStore.makeSoundIfWorkSessionEnd) {
               audio.value.play()
             }
             if (!paramStore.stopIfWorkSessionEnd) {
               mainHandler()
             } else {
-              minutes = 0
-              seconds = 0
-              hours = 0
+              minutes.value = 0
+              seconds.value = 0
+              hours.value = 0
 
             }
 
           } else {
-            hours--
-            minutes = 59
-            seconds = 59
+            hours.value--
+            minutes.value = 59
+            seconds.value = 59
           }
         } else {
-          minutes--
-          seconds = 59
+          minutes.value--
+          seconds.value = 59
         }
       } else {
-        seconds--
-      }
+        seconds.value--
 
-      Chours.value.textContent = String(hours).padStart(2, '0')
-      Cminutes.value.textContent = String(minutes).padStart(2, '0')
-      Cseconds.value.textContent = String(seconds).padStart(2, '0')
+      }
     }, 1000)
 
 
@@ -76,37 +67,37 @@ function mainHandler() {
     const Rseconds = paramStore.timeSecondsChill
     const Rhours = paramStore.timeHoursChill
 
-    minutes = minutes != undefined ? minutes : Rminutes as number
-    seconds = seconds != undefined ? seconds : Rseconds as number
-    hours = hours != undefined ? hours : Rhours as number
+    minutes.value = minutes.value != undefined ? minutes.value : Rminutes as number
+    seconds.value = seconds.value != undefined ? seconds.value : Rseconds as number
+    hours.value = hours.value != undefined ? hours.value : Rhours as number
 
     interval = setInterval(() => {
-      if (seconds <= 0) {
-        if (minutes <= 0) {
-          if (hours <= 0) {
+      if (seconds.value <= 0) {
+        if (minutes.value <= 0) {
+          if (hours.value <= 0) {
             clearInterval(interval)
             paramStore.isWorkTime = true
-            minutes = undefined
-            seconds = undefined
-            hours = undefined
+            minutes.value = undefined
+            seconds.value = undefined
+            hours.value = undefined
+            if (paramStore.makeSoundIfWorkSessionEnd) {
+              audio.value.play()
+            }
 
             mainHandler()
           } else {
-            hours--
-            minutes = 59
-            seconds = 59
+            hours.value--
+            minutes.value = 59
+            seconds.value = 59
           }
         } else {
-          minutes--
-          seconds = 59
+          minutes.value--
+          seconds.value = 59
         }
       } else {
-        seconds--
-      }
+        seconds.value--
 
-      Chours.value.textContent = String(hours).padStart(2, '0')
-      Cminutes.value.textContent = String(minutes).padStart(2, '0')
-      Cseconds.value.textContent = String(seconds).padStart(2, '0')
+      }
     }, 1000)
   }
 }
@@ -127,8 +118,34 @@ function handleBreak() {
   router.push('/');
 }
 
+function handleTimeLineChange(e) {
+  clearInterval(interval)
+  let all_time;
+  if (paramStore.isWorkTime) {
+    all_time = Number(paramStore.timeHoursWork) * 60 * 60 + Number(paramStore.timeMinutesWork) * 60 + Number(paramStore.timeSecondsWork)
+  } else {
+    all_time = Number(paramStore.timeHoursChill) * 60 * 60 + Number(paramStore.timeMinutesChill) * 60 + Number(paramStore.timeSecondsChill)
+  }
+
+  const percente = e.target.value
+
+  let alr = all_time - (percente / 100) * all_time
+  if (alr > all_time) {
+    alr = all_time
+  }
+  hours.value = Math.floor(alr / 60 / 60)
+  minutes.value = Math.floor((alr - hours.value * 60 * 60) / 60)
+  seconds.value = Math.floor(alr - hours.value * 60 * 60 - minutes.value * 60)
+  if (!paramStore.pause) {
+    mainHandler()
+  }
+
+}
+
 onMounted(() => {
   mainHandler()
+
+
 })
 
 
@@ -143,17 +160,17 @@ onMounted(() => {
       <div class="timer">
         <div class="time">
           <div class="time__block">
-            <p class="time__hours" ref="Chours"></p>
+            <p class="time__hours">{{ String(hours).padStart(2, '0') }}</p>
             <p>Часы</p>
           </div>
           <p class="time__title">:</p>
           <div class="time__block">
-            <p class="time__minutes" ref="Cminutes"></p>
+            <p class="time__minutes">{{ String(minutes).padStart(2, '0') }}</p>
             <p>Минуты</p>
           </div>
           <p class="time__title">:</p>
           <div class="time__block">
-            <p class="time__seconds" ref="Cseconds"></p>
+            <p class="time__seconds">{{ String(seconds).padStart(2, '0') }}</p>
             <p>Секунды</p>
           </div>
           <!-- <div class="time__block">
@@ -163,6 +180,11 @@ onMounted(() => {
 
         </div>
       </div>
+    </div>
+    <div class="timeline">
+      <input type="range" min="0" max="100" v-if="paramStore.showTimeline"
+        :value="paramStore.isWorkTime ? (100 - Math.round(((hours * 60 * 60 + minutes * 60 + seconds) / (Number(paramStore.timeHoursWork) * 60 * 60 + Number(paramStore.timeMinutesWork) * 60 + Number(paramStore.timeSecondsWork))) * 100)) : (100 - Math.round(((hours * 60 * 60 + minutes * 60 + seconds) / (Number(paramStore.timeHoursChill) * 60 * 60 + Number(paramStore.timeMinutesChill) * 60 + Number(paramStore.timeSecondsChill))) * 100))"
+        @change="handleTimeLineChange($event)">
     </div>
     <div class="timer__buttons">
       <button @click="handlePause" v-if="!paramStore.pause"><svg xmlns="http://www.w3.org/2000/svg" height="24px"
@@ -248,6 +270,75 @@ onMounted(() => {
   padding: 40px;
   color: var(--main-text-color);
 
+
+}
+
+.timeline {
+  width: 100%;
+  padding: 0 60px;
+
+  input[type="range"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 18px;
+    padding-top: 15px;
+    padding-bottom: 10px;
+    border: none;
+    border-radius: 4px;
+    overflow: hidden;
+    background-color: transparent;
+  }
+
+  input[type="range"]::-webkit-slider-runnable-track {
+    background: var(--main-back-time-line-color);
+    /* Цвет полосы */
+    height: 3px;
+    /* Высота полосы */
+    border-radius: 4px;
+    /* Закругленные края */
+  }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    background-color: var(--main-time-line-color);
+    border: 0px solid var(--main-time-line-color);
+    border-radius: 50%;
+    height: 18px;
+    width: 18px;
+    margin-top: -7px;
+    box-shadow: calc(-100vmax - 18px) 0 0 100vmax var(--main-time-line-color);
+    clip-path: polygon(100% 0,
+        2px 0,
+        0 7px,
+        -100vmax 7px,
+        -100vmax 11px,
+        0 11px,
+        2px 100%,
+        100% 100%);
+  }
+
+  &::-moz-range-track {
+    height: 6px;
+    background: var(--main-back-time-line-color);
+    border-radius: 5px;
+  }
+
+  &::-moz-range-progress {
+    height: 6px;
+    background: var(--main-time-line-color);
+    border-radius: 5px;
+  }
+
+  &::-moz-range-thumb {
+    height: 16px;
+    width: 16px;
+    background: var(--main-time-line-color);
+    border-radius: 50%;
+    border: none;
+  }
 
 }
 </style>
