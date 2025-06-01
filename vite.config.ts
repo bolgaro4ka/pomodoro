@@ -7,16 +7,16 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 // https://vite.dev/config/
 export default defineConfig({
   server: {
-    port: 5555, // change to your desired port
-    host: '0.0.0.0'
+    port: 2000, // change to your desired port
+    host: '0.0.0.0',
+    headers: {
+      'Cross-Origin-Embedder-Policy': 'unsafe-none', // added this part
+    },
   },
-  plugins: [
-    vue(),
-    vueDevTools(),
-  ],
+  plugins: [vue(), vueDevTools()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
 })
