@@ -12,6 +12,9 @@ export default defineConfig({
     headers: {
       'Cross-Origin-Embedder-Policy': 'unsafe-none', // added this part
     },
+    allowedHosts: [
+      'pt.blgr.space'
+    ]
   },
   plugins: [vue(), vueDevTools()],
   resolve: {
