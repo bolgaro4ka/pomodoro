@@ -42,6 +42,9 @@ function handleChange() {
               <option :value="1" selected>Плавающие шары</option>
               <option :value="2">Куб</option>
               <option :value="3">Волны</option>
+              <option :value="4">Пульсирующий круг</option>
+              <option :value="5">Пирамидка</option>
+              <option :value="6">Текст</option>
             </select>
           </div>
           <div v-if="paramStore.animationType == 2" class="param__option">
@@ -50,6 +53,14 @@ function handleChange() {
               <input type="number" v-model="paramStore.perspective" @change="handleChange">
               <p>px</p>
             </div>
+          </div>
+          <div v-if="paramStore.animationType == 6" class="param__option">
+            <p>Текст</p>
+            <input type="text" v-model="paramStore.smile" @change="handleChange">
+          </div>
+          <div class="param__option">
+            <p>Цвет анимации</p>
+            <input type="color" v-model="paramStore.mainAnimationColor" @change="handleChange">
           </div>
           <TitleLine title="Стили" />
           <div class="param__option">

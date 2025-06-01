@@ -24,19 +24,19 @@
   position: absolute;
   width: 20%;
   height: 20%;
-  background: var(--main-text-color);
+  background: var(--main-animation-color);
   border-radius: 50%;
   animation: float 3s ease-in-out infinite;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .ball:nth-child(2) {
-  background: var(--main-text-color);
+  background: var(--main-animation-color);
   animation-delay: -0.5s;
 }
 
 .ball:nth-child(3) {
-  background: var(--main-text-color);
+  background: var(--main-animation-color);
   animation-delay: -1s;
 }
 

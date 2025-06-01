@@ -16,10 +16,12 @@
 <style scoped>
 .loader__wrapper {
   height: 100dvh;
+  margin-top: calc(0px - var(--main-margin));
   width: 100vw;
-  position: absolute;
-  z-index: 10;
+  position: fixed;
+  z-index: 1000;
   display: flex;
+  background-color: var(--main-background-color);
   justify-content: center;
   align-items: center;
 }
@@ -41,7 +43,7 @@
   border: 8px solid #fff;
   border-radius: 50%;
   animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
-  border-color: var(--main-background-color) transparent transparent transparent;
+  border-color: var(--main-text-color) transparent transparent transparent;
 }
 
 .lds-ring div:nth-child(1) {

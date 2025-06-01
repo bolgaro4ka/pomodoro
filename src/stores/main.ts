@@ -14,6 +14,13 @@ export const useParamStore = defineStore('param', () => {
   const mainBorderColor = ref(
     localStorage.getItem('mainBorderColor') ? localStorage.getItem('mainBorderColor') : '#ffffff',
   )
+
+  const mainAnimationColor = ref(
+    localStorage.getItem('mainAnimationColor')
+      ? localStorage.getItem('mainAnimationColor')
+      : '#ffffff',
+  )
+
   const margin = ref(
     Number(localStorage.getItem('margin')) ? Number(localStorage.getItem('margin')) : 20,
   )
@@ -55,10 +62,14 @@ export const useParamStore = defineStore('param', () => {
   const perspective = ref(
     localStorage.getItem('perspective') ? Number(localStorage.getItem('perspective')) : 500,
   )
+
+  const smile = ref(localStorage.getItem('smile') ? String(localStorage.getItem('smile')) : '👻')
+
   const save = () => {
     localStorage.setItem('mainBackgroundColor', mainBackgroundColor.value)
     localStorage.setItem('mainTextColor', mainTextColor.value)
     localStorage.setItem('mainBorderColor', mainBorderColor.value)
+    localStorage.setItem('mainBorderColor', mainAnimationColor.value)
     localStorage.setItem('margin', String(margin.value))
 
     localStorage.setItem('animationType', String(animationType.value))
@@ -73,12 +84,15 @@ export const useParamStore = defineStore('param', () => {
 
     localStorage.setItem('stopIfWorkSessionEnd', String(stopIfWorkSessionEnd.value))
     localStorage.setItem('makeSoundIfWorkSessionEnd', String(makeSoundIfWorkSessionEnd.value))
+
+    localStorage.setItem('smile', String(smile.value))
   }
 
   const apply = () => {
     document.documentElement.style.setProperty('--main-background-color', mainBackgroundColor.value)
     document.documentElement.style.setProperty('--main-text-color', mainTextColor.value)
     document.documentElement.style.setProperty('--main-border-color', mainBorderColor.value)
+    document.documentElement.style.setProperty('--main-animation-color', mainAnimationColor.value)
     document.documentElement.style.setProperty('--main-margin', margin.value + 'px')
 
     document.documentElement.style.setProperty('--perspective', perspective.value + 'px')
@@ -88,9 +102,9 @@ export const useParamStore = defineStore('param', () => {
     mainBackgroundColor.value = '#586045'
     mainTextColor.value = '#ffffff'
     mainBorderColor.value = '#ffffff'
+    mainAnimationColor.value = '#ffffff'
     perspective.value = 500
     margin.value = 20
-
 
     save()
     apply()
@@ -121,6 +135,8 @@ export const useParamStore = defineStore('param', () => {
     recoveryState,
     stopIfWorkSessionEnd,
     makeSoundIfWorkSessionEnd,
-    perspective
+    perspective,
+    mainAnimationColor,
+    smile,
   }
 })

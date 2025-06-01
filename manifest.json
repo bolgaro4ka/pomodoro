@@ -1,0 +1,17 @@
+{
+  "name": "Pomodoro Timer",
+  "short_name": "PomoTimer",
+  "description": "Pomodoro Timer",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "white",
+  "theme_color": "#586045",
+
+  "icons": [
+    {
+      "src": "/public/favica.png",
+      "sizes": "128x128",
+      "type": "image/png"
+    }
+  ]
+}

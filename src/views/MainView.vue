@@ -1,38 +1,45 @@
 <script setup lang="ts">
 import TimerMain from '@/components/TimerMain.vue';
 import FullScreenLoader from '../components/FullScreenLoader.vue'
-import Balls from '@/components/aminations/Balls.vue';
 import { useParamStore } from '@/stores/main';
 import LIST_OF_ANIMATIONS from '@/stores/animations';
+import { onMounted, ref } from 'vue';
 
 
 const paramStore = useParamStore();
+const isShowLoader = ref(true)
+
+let interval;
+
+
+onMounted(() => {
+  interval = setInterval(() => {
+    isShowLoader.value = false
+    clearInterval(interval)
+
+
+  }, 1000)
+})
+
 </script>
 
 <template>
   <div>
-    <Suspense>
-      <div class="start__wrapper">
-        <div class="start__content">
-          <div :class="paramStore.animationType ? 'main__animation' : ''" >
-            <component :is="LIST_OF_ANIMATIONS[paramStore.animationType]" >
+    <FullScreenLoader v-if="isShowLoader" />
+    <div class="start__wrapper">
+      <div class="start__content">
+        <div :class="paramStore.animationType ? 'main__animation' : ''">
+          <component :is="LIST_OF_ANIMATIONS[paramStore.animationType]">
 
-            </component>
+          </component>
 
-          </div>
-          <div class="start__params">
-            <h2 class="title">{{ paramStore.isWorkTime ? 'Время работать!' : 'Время отдыхать!' }}</h2>
-            <TimerMain />
-          </div>
+        </div>
+        <div class="start__params">
+          <h2 class="title">{{ paramStore.isWorkTime ? 'Время работать!' : 'Время отдыхать!' }}</h2>
+          <TimerMain />
         </div>
       </div>
-
-
-
-      <template #fallback>
-        <FullScreenLoader />
-      </template>
-    </Suspense>
+    </div>
   </div>
 </template>
 

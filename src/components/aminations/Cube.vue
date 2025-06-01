@@ -35,13 +35,11 @@
   width: 100%;
   height: 100%;
   background: transparent;
-  border: 2px solid #fff;
+  border: 2px solid var(--main-animation-color);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 20px;
-  color: white;
 }
 
 .front {
